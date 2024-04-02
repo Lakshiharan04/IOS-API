@@ -46,7 +46,7 @@ router.get('/get', async (req, res) => {
     try {
         const products = await Product.find()
             .populate('categoryId', 'categoryName')
-            .select('productName price size imageUrl');
+            .select('productName price size imageUrl created_date');
 
         const productsWithDetails = products.map(product => {
             return {
@@ -55,7 +55,8 @@ router.get('/get', async (req, res) => {
                 categoryName: product.categoryId.categoryName,
                 price: product.price,
                 size: product.size,
-                imageUrl: product.imageUrl
+                imageUrl: product.imageUrl,
+                created_date: product.created_date
             };
         });
 
@@ -72,7 +73,7 @@ router.get('/:productId', async (req, res) => {
     try {
         const product = await Product.findById(productId)
             .populate('categoryId', 'categoryName')
-            .select('productName price size imageUrl');
+            .select('productName price size imageUrl created_date');
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
@@ -84,7 +85,8 @@ router.get('/:productId', async (req, res) => {
             categoryName: product.categoryId.categoryName,
             price: product.price,
             size: product.size,
-            imageUrl: product.imageUrl
+            imageUrl: product.imageUrl,
+            created_date: product.created_date
         };
 
         res.json(productDetails);
